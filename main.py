@@ -1,6 +1,8 @@
 from src.screen import Screen
 from src.motion_detector import MotionDetector
 
+import time
+
 if __name__ == "__main__":
     motion_detector = MotionDetector()
     screen = Screen()
@@ -9,3 +11,5 @@ if __name__ == "__main__":
         current_frame = motion_detector.process_frame(screen.take_screenshot())
         has_mootion = motion_detector.has_movement(previous_frame, current_frame)
         previous_frame = current_frame
+        print(has_mootion)
+        time.sleep(1)
