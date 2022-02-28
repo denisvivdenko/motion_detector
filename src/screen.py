@@ -1,5 +1,3 @@
-from doctest import script_from_examples
-from turtle import screensize
 import pyautogui
 import cv2
 import numpy as np
@@ -13,5 +11,4 @@ class Screen:
 
 if __name__ == "__main__":
     screen = Screen()
-    screen.take_screenshot()
-    # cv2.imshow(screen.take_scenshot())
+    cv2.imwrite("screen.png", screen.take_screenshot())

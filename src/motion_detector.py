@@ -36,7 +36,7 @@ class MotionDetector:
         threshold_frame = cv2.threshold(difference, 30, 255, cv2.THRESH_BINARY)[1]
         threshold_frame = cv2.dilate(threshold_frame, None, iterations=2)
         contours, _ = cv2.findContours(threshold_frame.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        return any([cv2.countourArea(contour) > contour_threshold for contour in contours])
+        return any([cv2.contourArea(contour)> contour_threshold for contour in contours])
 
     def process_frame(self, frame: np.ndarray) -> np.ndarray:
         """
