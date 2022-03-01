@@ -5,9 +5,7 @@ from src.motion_detector import MotionDetector
 from src.alarm import Alarm
 from datetime import datetime
 import numpy as np
-from src.utils import *
 
-import time
 
 def skip_frames(video, amount: int):
     for _ in range(amount):
@@ -17,9 +15,12 @@ def skip_frames(video, amount: int):
 if __name__ == "__main__":
     video = cv2.VideoCapture("src\\videos\\camera_1.mp4")
     alarm = Alarm("src\\alarms\\Alarm-ringtone.mp3")
-    motion_detector = MotionDetector(guassian_blur_parameters=(1, 1), 
+    motion_detector = MotionDetector(guassian_blur_parameters=(3, 3), 
+                                        threshold=30,
                                         erosion_kernel_shape=(1, 1), 
-                                        dilation_kernel_shape=(1, 1))
+                                        dilation_kernel_shape=(1, 1),
+                                        erosion_iterations=3,
+                                        dilation_iterations=3)
     screen = Screen()
     ret, frame = video.read()
     previous_frame = motion_detector.process_frame(frame)
