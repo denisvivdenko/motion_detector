@@ -28,7 +28,7 @@ class MotionDetector:
         """
         self.contour_threshold = contour_threshold
 
-    def has_movement(self, previous_frame: np.ndarray, current_frame: np.ndarray) -> bool:
+    def has_movement(self, previous_frame: np.ndarray, current_frame: np.ndarray) -> bool: # TODO
         """
             Checks if there is movements captured between two frames.
 
@@ -42,7 +42,7 @@ class MotionDetector:
         contours = self._detect_difference_contours(previous_frame, current_frame)
         return any([cv2.contourArea(contour)> self.contour_threshold for contour in contours])
 
-    def detect_movement(self, previous_frame: np.ndarray, current_frame: np.ndarray) -> List[DetectedObject]:
+    def detect_movement(self, previous_frame: np.ndarray, current_frame: np.ndarray) -> List[DetectedObject]: # TODO
         """
             Detects moving objects coordinates.
 
@@ -74,7 +74,7 @@ class MotionDetector:
         processed_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         return cv2.GaussianBlur(processed_frame, (3, 3), 0)
    
-    def _detect_difference_contours(self, frame_1: np.ndarray, frame_2: np.ndarray) -> List:
+    def _detect_difference_contours(self, frame_1: np.ndarray, frame_2: np.ndarray) -> List: # TODO
         """
             Detects contours between two processed frames.
         """
