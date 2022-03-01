@@ -1,0 +1,26 @@
+[
+    {
+        "guassian_blur_parameters": [1, 1], 
+        "threshold": 30,
+        "erosion_kernel_shape": [1, 1], 
+        "dilation_kernel_shape": [1, 1],
+        "erosion_iterations": 1,
+        "dilation_iterations": 1
+    },
+    {
+        "guassian_blur_parameters": [1, 1], 
+        "threshold": 30,
+        "erosion_kernel_shape": [1, 1], 
+        "dilation_kernel_shape": [1, 1],
+        "erosion_iterations": 3,
+        "dilation_iterations": 2
+    },
+    {
+        "guassian_blur_parameters": [3, 3], 
+        "threshold": 30,
+        "erosion_kernel_shape": [1, 1], 
+        "dilation_kernel_shape": [1, 1],
+        "erosion_iterations": 3,
+        "dilation_iterations": 3
+    }
+]
