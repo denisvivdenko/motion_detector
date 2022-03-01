@@ -9,28 +9,40 @@ from src.utils import *
 
 import time
 
+def skip_frames(video, amount: int):
+    for _ in range(amount):
+        video.read()
+    return video
+
 if __name__ == "__main__":
+    video = cv2.VideoCapture("src\\videos\\camera_1.mp4")
     alarm = Alarm("src\\alarms\\Alarm-ringtone.mp3")
     motion_detector = MotionDetector(guassian_blur_parameters=(1, 1), 
                                         erosion_kernel_shape=(1, 1), 
                                         dilation_kernel_shape=(1, 1))
     screen = Screen()
-    previous_frame = motion_detector.process_frame(screen.take_screenshot())
+    ret, frame = video.read()
+    previous_frame = motion_detector.process_frame(frame)
     index = 0
-    while True:
-        current_frame = screen.take_screenshot()
+    print(previous_frame.shape)
+    output = cv2.VideoWriter('test_1.avi', cv2.VideoWriter_fourcc('M','J','P','G'), 12, (previous_frame.shape[1], previous_frame.shape[0]), 0)
+    while video.isOpened():
+        skip_frames(video, 4)
+        recieved, current_frame = video.read()
+        if not recieved:
+            video.release()
+            break
+
         processed_current_frame = motion_detector.process_frame(current_frame)
         difference_frame = motion_detector.compute_difference_frame(previous_frame, processed_current_frame)
-        save_frame(difference_frame, index)
-        index += 1
+
+        output.write(difference_frame)
+
         if motion_detector.has_movement(difference_frame, area_threshold=10**4):
             alarm.turn_on(1)
-            print(1)
-        else:
-            print(0)
-        previous_frame = processed_current_frame
-        time.sleep(0.1)
 
+        previous_frame = processed_current_frame
+    output.release()
         
 # moving_objects = motion_detector.detect_movement(previous_frame, processed_current_frame)
 # object_highlighter = ObjectHighlighter(current_frame, moving_objects)
