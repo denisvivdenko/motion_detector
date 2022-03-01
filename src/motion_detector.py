@@ -37,8 +37,8 @@ class MotionDetector:
             Returns:
                 True | False
         """
-        return self.compute_difference_area(previous_frame, current_frame) >= area_threshold
-        
+        difference_frame = self.compute_difference_frame(previous_frame, current_frame)
+        return np.sum(difference_frame > 0) > area_threshold
 
     def detect_movement(self, previous_frame: np.ndarray, current_frame: np.ndarray) -> List[DetectedObject]: # TODO
         """
@@ -88,11 +88,10 @@ class MotionDetector:
         processed_frame = cv2.dilate(processed_frame, kernel, iterations=2)
         return processed_frame
 
-    def compute_difference_area(self, frame_1: np.ndarray, frame_2: np.ndarray) -> List:
+    def compute_difference_frame(self, frame_1: np.ndarray, frame_2: np.ndarray) -> np.ndarray:
         """
-            Computes difference between two frames.
-            Counts all non-zero values in frame
+            Computes difference between two frames and removes noise.
         """
         difference_frame = cv2.absdiff(frame_1, frame_2)
-        processed_frame = self.remove_noise(difference_frame)
-        return np.sum(processed_frame > 0)
+        return self.remove_noise(difference_frame)
+
