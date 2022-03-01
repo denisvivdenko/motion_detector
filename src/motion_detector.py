@@ -9,10 +9,8 @@ import pandas as pd
 
 DetectedObject = namedtuple("DetectedObject", ["x", "y", "height", "width"])
 
-counter = 0
-
 class MotionDetector:
-    def __init__(self, contour_threshold: int) -> None:
+    def __init__(self, guassian_blur_parameters: Tuple[int, int] = (3, 3)) -> None:
         """
             Detects motion between frames.
             
@@ -26,9 +24,9 @@ class MotionDetector:
             Parameters:
                 contour_threshold (int): countour threshold length
         """
-        self.contour_threshold = contour_threshold
+        self.guassian_blur_parameters = guassian_blur_parameters
 
-    def has_movement(self, previous_frame: np.ndarray, current_frame: np.ndarray) -> bool: # TODO
+    def has_movement(self, previous_frame: np.ndarray, current_frame: np.ndarray, area_threshold: int) -> bool:
         """
             Checks if there is movements captured between two frames.
 
@@ -39,8 +37,8 @@ class MotionDetector:
             Returns:
                 True | False
         """
-        contours = self._detect_difference_contours(previous_frame, current_frame)
-        return any([cv2.contourArea(contour)> self.contour_threshold for contour in contours])
+        return self.compute_difference_area(previous_frame, current_frame) >= area_threshold
+        
 
     def detect_movement(self, previous_frame: np.ndarray, current_frame: np.ndarray) -> List[DetectedObject]: # TODO
         """
@@ -72,18 +70,29 @@ class MotionDetector:
                 frame (np.ndarray)
         """
         processed_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        return cv2.GaussianBlur(processed_frame, (3, 3), 0)
-   
-    def _detect_difference_contours(self, frame_1: np.ndarray, frame_2: np.ndarray) -> List: # TODO
+        processed_frame = cv2.GaussianBlur(processed_frame, self.guassian_blur_parameters, 0)
+        return processed_frame
+    
+    def remove_noise(self, frame: np.ndarray, threshold: int = 30, kernel_shape: Tuple[int, int] = (3, 3)) -> np.ndarray:
         """
-            Detects contours between two processed frames.
+            Removes noise from image.
+            Apply threshold, erosion, dilation.
+
+            Parameters:
+                threshold (int): cv2.threshold method parameter.
+                kernel_shape (Tuple[int, int]): consists of odd numbers (3, 5, 7), used for erode and dilate methods.
         """
-        global counter
-        counter += 1
-        difference = cv2.absdiff(frame_1, frame_2)
-        print(difference)
-        cv2.imwrite(f"{counter}.png", difference)
-        threshold_frame = cv2.threshold(difference, 30, 255, cv2.THRESH_BINARY)[1]
-        threshold_frame = cv2.dilate(threshold_frame, None, iterations=2)
-        contours, _ = cv2.findContours(threshold_frame.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        return contours
+        kernel = np.ones(kernel_shape, np.uint8)
+        processed_frame = cv2.threshold(frame, threshold, 255, cv2.THRESH_BINARY)[1]
+        processed_frame = cv2.erode(processed_frame, kernel, iterations=2)
+        processed_frame = cv2.dilate(processed_frame, kernel, iterations=2)
+        return processed_frame
+
+    def compute_difference_area(self, frame_1: np.ndarray, frame_2: np.ndarray) -> List:
+        """
+            Computes difference between two frames.
+            Counts all non-zero values in frame
+        """
+        difference_frame = cv2.absdiff(frame_1, frame_2)
+        processed_frame = self.remove_noise(difference_frame)
+        return np.sum(processed_frame > 0)
