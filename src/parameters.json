@@ -54,5 +54,53 @@
         "dilation_kernel_shape": [7, 7],
         "erosion_iterations": 10,
         "dilation_iterations": 2
+    },
+    {
+        "guassian_blur_parameters": [5, 5], 
+        "threshold": 20,
+        "erosion_kernel_shape": [1, 1], 
+        "dilation_kernel_shape": [7, 7],
+        "erosion_iterations": 10,
+        "dilation_iterations": 2
+    },
+    {
+        "guassian_blur_parameters": [7, 7], 
+        "threshold": 20,
+        "erosion_kernel_shape": [1, 1], 
+        "dilation_kernel_shape": [7, 7],
+        "erosion_iterations": 15,
+        "dilation_iterations": 2
+    },
+    {
+        "guassian_blur_parameters": [5, 5], 
+        "threshold": 15,
+        "erosion_kernel_shape": [3, 3], 
+        "dilation_kernel_shape": [7, 7],
+        "erosion_iterations": 15,
+        "dilation_iterations": 2
+    },
+    {
+        "guassian_blur_parameters": [5, 5], 
+        "threshold": 5,
+        "erosion_kernel_shape": [3, 3], 
+        "dilation_kernel_shape": [7, 7],
+        "erosion_iterations": 15,
+        "dilation_iterations": 2
+    },
+    {
+        "guassian_blur_parameters": [1, 1], 
+        "threshold": 5,
+        "erosion_kernel_shape": [3, 3], 
+        "dilation_kernel_shape": [7, 7],
+        "erosion_iterations": 15,
+        "dilation_iterations": 2
+    },
+    {
+        "guassian_blur_parameters": [1, 1], 
+        "threshold": 30,
+        "erosion_kernel_shape": [3, 3], 
+        "dilation_kernel_shape": [7, 7],
+        "erosion_iterations": 15,
+        "dilation_iterations": 1
     }
 ]
